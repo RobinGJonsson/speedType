@@ -1,6 +1,7 @@
-import curses
-from curses import wrapper
-import time
+# import curses
+# from curses import wrapper
+# import time
+import random
 
 
 # Ask for user name
@@ -14,9 +15,13 @@ def get_username():
         else:
             print('Username can only contain letters and no spaces!')
 
-
-
 # Generate a sentence for user to copy
+def get_random_sentence():
+    '''Return a random sentence as a string from sentences.txt'''
+    with open('sentences.txt', 'r') as f:
+        sentences = f.readlines()
+        return random.choice(sentences)
+
 
 # display the sentence
 # split the letters into a list
