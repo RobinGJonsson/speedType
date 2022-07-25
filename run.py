@@ -33,3 +33,31 @@ def get_random_sentence():
     with open('sentences.txt', 'r', encoding='utf-8') as file:
         sentences = file.readlines()
         return random.choice(sentences)
+
+
+def init_screen():
+    pass
+
+
+def calc_cps():
+    pass
+
+
+def calc_wpm():
+    pass
+
+
+def calc_accuracy():
+    pass
+
+
+def display_content():
+    pass
+
+
+def run():
+    pass
+
+
+def main():
+    pass
