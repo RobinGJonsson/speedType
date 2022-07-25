@@ -35,8 +35,20 @@ def get_random_sentence():
         return random.choice(sentences)
 
 
-def init_screen():
-    pass
+def init_screen(stdscr):
+    '''Displays the start screen before the actual game starts'''
+    stdscr.clear()
+    username = get_username(stdscr)
+
+    stdscr.addstr(f'Hello {username}')
+    stdscr.addstr("\nThe rule is to copy the target sentence that will be "
+                  "displayed upon game START without errors."
+                  "\nOnce the you've reached the end with no errors hit "
+                  "ENTER.\nTo start press any key...")
+
+    # Wait until user presses any key
+    stdscr.getkey()
+    stdscr.clear()
 
 
 def calc_cps():
