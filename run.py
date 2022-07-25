@@ -71,10 +71,13 @@ def calc_wpm(elapsed_secs, avg_word_len, typed_len):
     return round((typed_len / elapsed_minutes) / avg_word_len, 2)
 
 
-
-def calc_accuracy():
-    pass
-
+def calc_accuracy(correct_typed, total_chars_typed):
+    '''Calculate the typing accuracy'''
+    # Catch ZeroDivisionError before anything has yet been typed
+    try:
+        return f'{(round((len(correct_typed) / total_chars_typed), 2) * 100)}%'
+    except ZeroDivisionError:
+        return '---'
 
 def display_content():
     pass
