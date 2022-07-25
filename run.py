@@ -51,13 +51,25 @@ def init_screen(stdscr):
     stdscr.clear()
 
 
+def calc_avg_word_len(sentence):
+    '''Calculate the average word length of the sentense'''
+    words = sentence.split(' ')
+    word_len = 0
+    for word in words:
+        word_len += len(word)
+    return round((word_len / len(words)), 0)
+
+
 def calc_cps(elapsed_secs, chars_typed):
     '''Calculate and return the characters per second'''
     return round((chars_typed / elapsed_secs), 2)
 
 
-def calc_wpm():
-    pass
+def calc_wpm(elapsed_secs, avg_word_len, typed_len):
+    '''Calculate the words per minute '''
+    elapsed_minutes = elapsed_secs / 60
+    return round((typed_len / elapsed_minutes) / avg_word_len, 2)
+
 
 
 def calc_accuracy():
