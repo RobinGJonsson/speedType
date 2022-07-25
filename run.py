@@ -146,6 +146,13 @@ def run(stdscr):
             total_chars_typed += 1
             typed_str += key
 
+        # Add the correctly typed charachters to a list
+        for i, char in enumerate(typed_str):
+            if len(typed_str) > len(sentence):
+                break
+            if char == sentence[i] and len(correct_typed) < i+1:
+                correct_typed.append(char)
+
 
 def main(stdscr):
     '''Main function calls functions to initialize the game'''
