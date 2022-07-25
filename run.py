@@ -79,6 +79,7 @@ def calc_accuracy(correct_typed, total_chars_typed):
     except ZeroDivisionError:
         return '---'
 
+
 def display_content():
     pass
 
@@ -87,5 +88,15 @@ def run():
     pass
 
 
-def main():
-    pass
+def main(stdscr):
+    '''Main function calls functions to initialize the game'''
+
+    # Define colors to be used 
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+
+    # Get the initial screen
+    init_screen(stdscr)
+
+
+wrapper(main)
