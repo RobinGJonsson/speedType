@@ -117,6 +117,8 @@ def run(stdscr):
     avg_word_len = calc_avg_word_len(sentence)
 
     while True:
+        # Sleep to make sure that stdscr.nodelay() doesn't cause flickering
+        time.sleep(0.05)
         elapsed_secs = max(time.time() - start_time, 1)
         chars_typed = len(typed_str)
 
@@ -129,7 +131,10 @@ def run(stdscr):
                         sentence, cps, wpm, accuracy)
         stdscr.refresh()
 
-        key = stdscr.getkey()
+        try:
+            key = stdscr.getkey()
+        except curses.error:
+            continue
 
         # Remove last character from list if backspace is pressed
         if key in ('KEY_BACKSPACE', '\b', '\x7f'):
@@ -175,6 +180,9 @@ def main(stdscr):
     while True:
         # Get the initial screen
         init_screen(stdscr)
+        
+        # Keep program looping even while the user is not typeing
+        stdscr.nodelay(True)
         run(stdscr)
         stdscr.clear()
         stdscr.addstr('To play again press any key...\n'
