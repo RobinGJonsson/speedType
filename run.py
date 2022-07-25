@@ -1,64 +1,35 @@
-# import curses
-# from curses import wrapper
-# import time
+import curses
+from curses import wrapper
 import random
+import time
 
 
-# Ask for user name
-def get_username():
+def get_username(stdscr):
     '''Asks for username and return username if it only contains letters'''
+    stdscr.addstr('Choose a username: ')
+    username = ''
     while True:
-        username = input('Choose a username: ')
+        key = stdscr.getkey()
         # Check if name only contains letters, else ask again
-        if username.isalpha():
-            return username
+        if key.isalpha():
+            stdscr.addch(key)
+            username += key
+        elif key in ('KEY_BACKSPACE', '\b', '\x7f'):
+            stdscr.clear()
+            username = username[:-1]
+            stdscr.addstr(username)
+        elif key in ('KEY_ENTER', '\n'):
+            break
         else:
-            print('Username can only contain letters and no spaces!')
+            stdscr.addstr('\nUsername can only contain letters and no spaces!')
+            stdscr.addstr(f'\n{username}')
+    stdscr.clear()
+    return username
+
 
 # Generate a sentence for user to copy
 def get_random_sentence():
     '''Return a random sentence as a string from sentences.txt'''
-    with open('sentences.txt', 'r') as f:
-        sentences = f.readlines()
+    with open('sentences.txt', 'r', encoding='utf-8') as file:
+        sentences = file.readlines()
         return random.choice(sentences)
-
-
-# display the sentence
-# split the letters into a list
-# And placed into a dictionary with value of none until button is pressed upon 
-# which the value will change to true or false
-
-# Check for buttons pressed
-
-# While loop while end isn't reached, each loop waits for a key press 
-# For each loop add 1 to i 
-# i will represent the relevant key by calling the i index from the 
-# characher list 
-# So call the key from the dict with i 
-# If they match the relevant character save them to a list, the char will 
-# display green 
-# If backspace, remove the last index from the correct list
-# subtract 1 from i  
-# When a wrong charachter is pressed it will be saved as wrong and display as red until user fix the error 
-
-# Measure time between each key pressed 
-    # Display as chartachers pressed per second and minute 
-# Measure time between each word 
-    # Display as chartachers pressed per second and minute 
-
-# When all is correct display score
-    # Accuracy
-    # errors/correct 
-    # words/charachters per minute 
-    # words/charachters per minute 
-    
-    # Ask for new game yes/no
-        # if no exit()
-        # if yes call start game again
-
-# Make GUI 
-    # Displays sentence 
-    # Display stats
-    # Text area 
-        # Color charachers based on correct/incorrect
-    
