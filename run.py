@@ -1,3 +1,17 @@
+'''
+Speed Typing Test
+
+This script allows a user to test how fast they can type a random
+sentence correctly.
+
+It measures characters per second (cps), words per minut (wpm)
+and the precentage of correctly typed characters measured aginst the toatal
+number of characters typed.
+
+This script requires that `curses` be installed within the Python
+environment you are running this script in.
+
+'''
 import curses
 from curses import wrapper
 import random
@@ -140,20 +154,24 @@ def run(stdscr):
         except curses.error:
             continue
 
-        # Remove last character from list if backspace is pressed
-        if key in ('KEY_BACKSPACE', '\b', '\x7f'):
-            if len(typed_str) > 0:
-                typed_str = typed_str[:-1]
+        # Catch exception if key can't be converted to ord() value 
+        try:
+            # Remove last character from list if backspace is pressed
+            if key in ('KEY_BACKSPACE', '\b', '\x7f'):
+                if len(typed_str) > 0:
+                    typed_str = typed_str[:-1]
+                continue
+
+            # End game when esc is pressed
+            if ord(key) == 27:
+                break
+
+            # If key is a ascii add it to list
+            if key.isascii():
+                total_chars_typed += 1
+                typed_str += key
+        except TypeError:
             continue
-
-        # End game when esc is pressed
-        elif ord(key) == 27:
-            break
-
-        # If key is a ascii add it to list
-        elif key.isascii():
-            total_chars_typed += 1
-            typed_str += key
 
         # Add the correctly typed charachters to a list
         for i, char in enumerate(typed_str):
