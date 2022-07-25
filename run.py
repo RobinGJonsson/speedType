@@ -51,8 +51,9 @@ def init_screen(stdscr):
     stdscr.clear()
 
 
-def calc_cps():
-    pass
+def calc_cps(elapsed_secs, chars_typed):
+    '''Calculate and return the characters per second'''
+    return round((chars_typed / elapsed_secs), 2)
 
 
 def calc_wpm():
