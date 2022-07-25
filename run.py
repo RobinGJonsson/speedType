@@ -153,6 +153,17 @@ def run(stdscr):
             if char == sentence[i] and len(correct_typed) < i+1:
                 correct_typed.append(char)
 
+        # Finish game if entered sentence match original sentence
+        if typed_str == sentence:
+            stdscr.clear()
+            stdscr.nodelay(False)
+            stdscr.addstr('Well done! Your final stats:')
+            stdscr.addstr(1, 0, f'CPS: {cps}\nWPM: {wpm}\n'
+                          f'Accuracy: {accuracy}')
+            stdscr.addstr('\n\nPress any key to continue')
+            stdscr.getkey()
+            break
+
 
 def main(stdscr):
     '''Main function calls functions to initialize the game'''
@@ -161,9 +172,17 @@ def main(stdscr):
     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 
-    # Get the initial screen
-    init_screen(stdscr)
-    run(stdscr)
+    while True:
+        # Get the initial screen
+        init_screen(stdscr)
+        run(stdscr)
+        stdscr.clear()
+        stdscr.addstr('To play again press any key...\n'
+                      'To end game press esc...')
+        key = stdscr.getkey()
+
+        if ord(key) == 27:
+            break
 
 
 wrapper(main)
