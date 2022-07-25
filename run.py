@@ -11,6 +11,8 @@ def get_username(stdscr):
     username = ''
     while True:
         key = stdscr.getkey()
+        stdscr.clear()
+        stdscr.addstr(f'Choose a username: {username}')
         # Check if name only contains letters, else ask again
         if key.isalpha():
             stdscr.addch(key)
@@ -18,12 +20,13 @@ def get_username(stdscr):
         elif key in ('KEY_BACKSPACE', '\b', '\x7f'):
             stdscr.clear()
             username = username[:-1]
-            stdscr.addstr(username)
-        elif key in ('KEY_ENTER', '\n'):
+            stdscr.addstr(f'Choose a username: {username}')
+        elif key in ('KEY_ENTER', '\n') and len(username) > 0:
             break
         else:
-            stdscr.addstr('\nUsername can only contain letters and no spaces!')
-            stdscr.addstr(f'\n{username}')
+            stdscr.clear()
+            stdscr.addstr('Username can only contain letters and no spaces!')
+            stdscr.addstr(f'\nChoose a username: {username}')
     stdscr.clear()
     return username
 
@@ -131,6 +134,7 @@ def run(stdscr):
                         sentence, cps, wpm, accuracy)
         stdscr.refresh()
 
+        # Catch no input error due to the nodelay()
         try:
             key = stdscr.getkey()
         except curses.error:
