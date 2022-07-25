@@ -131,8 +131,18 @@ def run(stdscr):
 
         key = stdscr.getkey()
 
+        # Remove last character from list if backspace is pressed
+        if key in ('KEY_BACKSPACE', '\b', '\x7f'):
+            if len(typed_str) > 0:
+                typed_str = typed_str[:-1]
+            continue
+
+        # End game when esc is pressed
+        elif ord(key) == 27:
+            break
+
         # If key is a ascii add it to list
-        if key.isascii():
+        elif key.isascii():
             total_chars_typed += 1
             typed_str += key
 
