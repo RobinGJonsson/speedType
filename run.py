@@ -6,7 +6,7 @@ import time
 
 def get_username(stdscr):
     '''Asks for username and return username if it only contains letters'''
-    
+
     stdscr.addstr('Choose a username: ')
     username = ''
     while True:
@@ -31,7 +31,7 @@ def get_username(stdscr):
 # Generate a sentence for user to copy
 def get_random_sentence():
     '''Return a random sentence as a string from sentences.txt'''
-    
+
     with open('sentences.txt', 'r', encoding='utf-8') as file:
         sentences = file.readlines()
         return random.choice(sentences)
@@ -39,7 +39,7 @@ def get_random_sentence():
 
 def init_screen(stdscr):
     '''Displays the start screen before the actual game starts'''
-    
+
     stdscr.clear()
     username = get_username(stdscr)
 
@@ -56,7 +56,7 @@ def init_screen(stdscr):
 
 def calc_avg_word_len(sentence):
     '''Calculate the average word length of the sentense'''
-    
+
     words = sentence.split(' ')
     word_len = 0
     for word in words:
@@ -66,20 +66,20 @@ def calc_avg_word_len(sentence):
 
 def calc_cps(elapsed_secs, chars_typed):
     '''Calculate and return the characters per second'''
-    
+
     return round((chars_typed / elapsed_secs), 2)
 
 
 def calc_wpm(elapsed_secs, avg_word_len, typed_len):
     '''Calculate the words per minute '''
-    
+
     elapsed_minutes = elapsed_secs / 60
     return round((typed_len / elapsed_minutes) / avg_word_len, 2)
 
 
 def calc_accuracy(correct_typed, total_chars_typed):
     '''Calculate the typing accuracy'''
-   
+
     # Catch ZeroDivisionError before anything has yet been typed
     try:
         return f'{(round((len(correct_typed) / total_chars_typed), 2) * 100)}%'
@@ -87,8 +87,23 @@ def calc_accuracy(correct_typed, total_chars_typed):
         return '---'
 
 
-def display_content():
-    pass
+def display_content(stdscr, txt_lst, target_txt, cps, wpm, accuracy):
+    '''Display target sentence, user input, cps, wpm and
+    accuracy to the terminal'''
+    stdscr.addstr(target_txt)
+    stdscr.addstr(2, 0, f'CPS: {cps}\nWPM: {wpm}\nAccuracy: {accuracy}')
+
+    for i, char in enumerate(txt_lst):
+        try:
+            # If correctly typed color is green
+            if char == target_txt[i]:
+                stdscr.addch(0, i, target_txt[i], curses.color_pair(1))
+            # If incorrectly typed color is red
+            else:
+                stdscr.addch(0, i, target_txt[i], curses.color_pair(2))
+        # If written longer than target text color is red
+        except IndexError:
+            stdscr.addch(0, i, char, curses.color_pair(2))
 
 
 def run(stdscr):
@@ -109,6 +124,18 @@ def run(stdscr):
         wpm = calc_wpm(elapsed_secs, avg_word_len, len(typed_str))
         accuracy = calc_accuracy(correct_typed, total_chars_typed)
 
+        stdscr.clear()
+        display_content(stdscr, typed_str,
+                        sentence, cps, wpm, accuracy)
+        stdscr.refresh()
+
+        key = stdscr.getkey()
+
+        # If key is a ascii add it to list
+        if key.isascii():
+            total_chars_typed += 1
+            typed_str += key
+
 
 def main(stdscr):
     '''Main function calls functions to initialize the game'''
@@ -119,6 +146,7 @@ def main(stdscr):
 
     # Get the initial screen
     init_screen(stdscr)
+    run(stdscr)
 
 
 wrapper(main)
