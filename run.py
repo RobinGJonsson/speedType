@@ -8,10 +8,10 @@ It measures characters per second (cps), words per minut (wpm)
 and the precentage of correctly typed characters measured aginst the toatal
 number of characters typed.
 
-This script requires that `curses` be installed within the Python
-environment you are running this script in.
-
+This script requires that `curses` and/or `windows-curses` 
+be installed within the Python environment you are running this script in.
 '''
+
 import curses
 from curses import wrapper
 import random
@@ -27,7 +27,8 @@ def get_username(stdscr):
         key = stdscr.getkey()
         stdscr.clear()
         stdscr.addstr(f'Choose a username: {username}')
-        # Check if name only contains letters, else ask again
+
+        # Check if name only contains letters
         if key.isalpha():
             stdscr.addch(key)
             username += key
@@ -37,6 +38,7 @@ def get_username(stdscr):
             stdscr.addstr(f'Choose a username: {username}')
         elif key in ('KEY_ENTER', '\n') and len(username) > 0:
             break
+        # If invalid input 
         else:
             stdscr.clear()
             stdscr.addstr('Username can only contain letters and no spaces!')
@@ -45,7 +47,6 @@ def get_username(stdscr):
     return username
 
 
-# Generate a sentence for user to copy
 def get_random_sentence():
     '''Return a random sentence as a string from sentences.txt'''
 
@@ -61,10 +62,11 @@ def init_screen(stdscr):
     username = get_username(stdscr)
 
     stdscr.addstr(f'Hello {username}')
-    stdscr.addstr("\nThe rule is to copy the target sentence that will be "
+    stdscr.addstr("\n\nThe rule is to copy the target sentence that will be "
                   "displayed upon game START without errors."
                   "\nOnce the you've reached the end with no errors hit "
-                  "ENTER.\nTo start press any key...")
+                  "ENTER.\nIf you want to end the game just hit esc\n"
+                  "To start press any key...")
 
     # Wait until user presses any key
     stdscr.getkey()
@@ -117,7 +119,10 @@ def display_content(stdscr, txt_lst, target_txt, cps, wpm, accuracy):
                 stdscr.addch(0, i, target_txt[i], curses.color_pair(1))
             # If incorrectly typed color is red
             else:
-                stdscr.addch(0, i, target_txt[i], curses.color_pair(2))
+                if target_txt[i] == ' ':
+                    stdscr.addch(0, i, '/', curses.color_pair(2))
+                else:
+                    stdscr.addch(0, i, target_txt[i], curses.color_pair(2))
         # If written longer than target text color is red
         except IndexError:
             stdscr.addch(0, i, char, curses.color_pair(2))
@@ -154,7 +159,7 @@ def run(stdscr):
         except curses.error:
             continue
 
-        # Catch exception if key can't be converted to ord() value 
+        # Catch exception if key can't be converted to ord() value
         try:
             # Remove last character from list if backspace is pressed
             if key in ('KEY_BACKSPACE', '\b', '\x7f'):
@@ -195,14 +200,14 @@ def run(stdscr):
 def main(stdscr):
     '''Main function calls functions to initialize the game'''
 
-    # Define colors to be used 
+    # Define colors to be used
     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 
     while True:
         # Get the initial screen
         init_screen(stdscr)
-        
+
         # Keep program looping even while the user is not typeing
         stdscr.nodelay(True)
         run(stdscr)
