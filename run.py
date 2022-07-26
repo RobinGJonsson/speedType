@@ -8,7 +8,7 @@ It measures characters per second (cps), words per minut (wpm)
 and the precentage of correctly typed characters measured aginst the toatal
 number of characters typed.
 
-This script requires that `curses` and/or `windows-curses` 
+This script requires that `curses` and/or `windows-curses`
 be installed within the Python environment you are running this script in.
 '''
 
@@ -23,6 +23,7 @@ def get_username(stdscr):
 
     stdscr.addstr('Choose a username: ')
     username = ''
+
     while True:
         key = stdscr.getkey()
         stdscr.clear()
@@ -38,7 +39,7 @@ def get_username(stdscr):
             stdscr.addstr(f'Choose a username: {username}')
         elif key in ('KEY_ENTER', '\n') and len(username) > 0:
             break
-        # If invalid input 
+        # If invalid input
         else:
             stdscr.clear()
             stdscr.addstr('Username can only contain letters and no spaces!')
@@ -65,7 +66,7 @@ def init_screen(stdscr):
     stdscr.addstr("\n\nThe rule is to copy the target sentence that will be "
                   "displayed upon game START without errors."
                   "\nOnce the you've reached the end with no errors hit "
-                  "ENTER.\nIf you want to end the game just hit esc\n"
+                  "ENTER.\nIf you want to end the game just hit ESC\n\n"
                   "To start press any key...")
 
     # Wait until user presses any key
